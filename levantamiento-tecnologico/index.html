@@ -1,1 +1,1083 @@
-temporal
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Levantamiento Tecnológico — Consejos Regionales JNCBCH</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --rojo: #C8102E;
+    --rojo-oscuro: #9B0C22;
+    --rojo-suave: #F9E8EB;
+    --gris-900: #111827;
+    --gris-700: #374151;
+    --gris-500: #6B7280;
+    --gris-300: #D1D5DB;
+    --gris-100: #F3F4F6;
+    --blanco: #FFFFFF;
+    --verde: #059669;
+    --amarillo: #D97706;
+    --azul: #2563EB;
+    --morado: #7C3AED;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gris-100);
+    color: var(--gris-900);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--rojo);
+    color: white;
+    padding: 0;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 32px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+  }
+  .header-icon {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .header-top h1 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.3px; }
+  .header-top p { font-size: 0.78rem; opacity: 0.8; margin-top: 1px; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    padding: 0 32px;
+    gap: 2px;
+  }
+  .tab {
+    padding: 11px 18px;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.18s;
+    font-family: 'Inter', sans-serif;
+  }
+  .tab:hover { color: white; background: rgba(255,255,255,0.08); }
+  .tab.active { color: white; border-bottom-color: white; }
+
+  /* MAIN */
+  main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--gris-300);
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gris-700);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title span { font-size: 1rem; }
+
+  /* SELECTOR CONSEJO */
+  .consejo-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .consejo-btn {
+    padding: 10px 8px;
+    border: 2px solid var(--gris-300);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--gris-700);
+    text-align: center;
+    transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+  }
+  .consejo-btn:hover { border-color: var(--rojo); color: var(--rojo); }
+  .consejo-btn.selected { border-color: var(--rojo); background: var(--rojo-suave); color: var(--rojo); }
+  .consejo-btn.completo { border-color: var(--verde); background: #ECFDF5; color: var(--verde); }
+  .consejo-btn .badge {
+    position: absolute; top: -6px; right: -6px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    font-size: 0.6rem;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+  .consejo-btn.completo .badge { background: var(--verde); color: white; }
+
+  /* FORM FIELDS */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label { font-size: 0.78rem; font-weight: 600; color: var(--gris-700); }
+  .form-group input, .form-group select, .form-group textarea {
+    border: 1.5px solid var(--gris-300);
+    border-radius: 7px;
+    padding: 8px 12px;
+    font-size: 0.83rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--gris-900);
+    transition: border-color 0.15s;
+    background: white;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--rojo);
+  }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 20px 0 14px;
+  }
+  .section-divider span {
+    font-size: 0.75rem; font-weight: 700; color: var(--rojo);
+    text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
+  }
+  .section-divider hr { flex: 1; border: none; border-top: 1.5px solid var(--gris-300); }
+
+  /* COUNTER FIELDS */
+  .counter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+  .counter-item {
+    background: var(--gris-100);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .counter-label { font-size: 0.78rem; color: var(--gris-700); font-weight: 500; flex: 1; }
+  .counter-controls { display: flex; align-items: center; gap: 6px; }
+  .counter-btn {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    border: 1.5px solid var(--gris-300);
+    background: white;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gris-700);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.12s;
+  }
+  .counter-btn:hover { border-color: var(--rojo); color: var(--rojo); }
+  .counter-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 24px;
+    text-align: center;
+    color: var(--gris-900);
+  }
+
+  /* CHECKBOXES */
+  .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .check-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    background: var(--gris-100);
+    cursor: pointer;
+  }
+  .check-item input[type="checkbox"] { accent-color: var(--rojo); width: 15px; height: 15px; cursor: pointer; }
+  .check-item label { font-size: 0.8rem; color: var(--gris-700); cursor: pointer; }
+
+  /* ESTADO BADGE */
+  .estado-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 600;
+  }
+  .estado-badge.bueno { background: #D1FAE5; color: #065F46; }
+  .estado-badge.regular { background: #FEF3C7; color: #92400E; }
+  .estado-badge.malo { background: #FEE2E2; color: #991B1B; }
+
+  /* BUTTONS */
+  .btn { padding: 9px 18px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.83rem; font-weight: 600; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+  .btn-primary { background: var(--rojo); color: white; }
+  .btn-primary:hover { background: var(--rojo-oscuro); }
+  .btn-secondary { background: var(--gris-100); color: var(--gris-700); border: 1.5px solid var(--gris-300); }
+  .btn-secondary:hover { background: var(--gris-300); }
+  .btn-success { background: var(--verde); color: white; }
+  .btn-row { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+
+  /* PROGRESS */
+  .progress-bar { background: var(--gris-300); border-radius: 99px; height: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 99px; background: var(--rojo); transition: width 0.3s; }
+
+  /* PANEL TABS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* MAPA / RESUMEN */
+  .mapa-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .mapa-card {
+    background: white;
+    border: 2px solid var(--gris-300);
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mapa-card:hover { border-color: var(--rojo); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(200,16,46,0.1); }
+  .mapa-card.sin-datos { opacity: 0.5; }
+  .mapa-card .region-label { font-size: 0.72rem; color: var(--gris-500); font-weight: 600; text-transform: uppercase; }
+  .mapa-card .region-nombre { font-size: 0.88rem; font-weight: 700; color: var(--gris-900); margin: 3px 0 8px; }
+  .mapa-mini-stats { display: flex; gap: 6px; flex-wrap: wrap; }
+  .mini-stat { background: var(--gris-100); border-radius: 5px; padding: 3px 7px; font-size: 0.7rem; color: var(--gris-700); }
+  .mini-stat strong { color: var(--gris-900); }
+
+  /* INFORME */
+  .informe-section { margin-bottom: 28px; }
+  .informe-section h3 { font-size: 0.95rem; font-weight: 700; color: var(--gris-900); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--gris-300); }
+  .informe-tabla { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  .informe-tabla th { background: var(--gris-900); color: white; padding: 8px 12px; text-align: left; font-size: 0.75rem; }
+  .informe-tabla td { padding: 8px 12px; border-bottom: 1px solid var(--gris-300); color: var(--gris-700); }
+  .informe-tabla tr:hover td { background: var(--gris-100); }
+
+  /* STATS ROW */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat-box { background: white; border-radius: 10px; padding: 16px 18px; border: 1px solid var(--gris-300); }
+  .stat-box .val { font-size: 1.8rem; font-weight: 700; color: var(--rojo); font-family: 'JetBrains Mono', monospace; }
+  .stat-box .lbl { font-size: 0.75rem; color: var(--gris-500); margin-top: 2px; }
+
+  /* NOTA */
+  .nota { background: #FFF7ED; border-left: 4px solid var(--amarillo); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: 0.8rem; color: #92400E; margin-bottom: 16px; }
+
+  @media (max-width: 768px) {
+    main { padding: 16px; }
+    .header-top { padding: 14px 16px; }
+    .tabs { padding: 0 16px; }
+    .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
+    .mapa-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="header-icon">🔥</div>
+    <div>
+      <h1>Levantamiento Tecnológico — Consejos Regionales</h1>
+      <p>Junta Nacional de Cuerpos de Bomberos de Chile · Área TI</p>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="showPanel('ingreso')">📋 Ingreso de Datos</button>
+    <button class="tab" onclick="showPanel('mapa')">🗺️ Mapa Tecnológico</button>
+    <button class="tab" onclick="showPanel('informe')">📊 Informe</button>
+    <button class="tab" onclick="showPanel('exportar')">💾 Exportar</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ===== PANEL: INGRESO ===== -->
+<div class="panel active" id="panel-ingreso">
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title"><span>📍</span> Seleccionar Consejo Regional</div>
+    <div class="consejo-selector" id="consejoSelector"></div>
+    <div style="display:flex; align-items:center; gap:10px; margin-top:8px; font-size:0.75rem; color:var(--gris-500);">
+      <span style="width:12px;height:12px;border-radius:3px;background:var(--gris-300);display:inline-block;"></span> Sin datos
+      <span style="width:12px;height:12px;border-radius:3px;background:var(--rojo-suave);border:2px solid var(--rojo);display:inline-block;"></span> Seleccionado
+      <span style="width:12px;height:12px;border-radius:3px;background:#ECFDF5;border:2px solid var(--verde);display:inline-block;"></span> Guardado
+    </div>
+  </div>
+
+  <div id="formArea" style="display:none;">
+
+    <!-- INFO GENERAL -->
+    <div class="card">
+      <div class="card-title"><span>🏢</span> Información General del Consejo</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Responsable de TI / Contacto</label>
+          <input type="text" id="f_contacto" placeholder="Nombre y apellido">
+        </div>
+        <div class="form-group">
+          <label>Cargo</label>
+          <input type="text" id="f_cargo" placeholder="Ej: Encargado TI, Secretario">
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input type="email" id="f_email" placeholder="correo@ejemplo.cl">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="text" id="f_telefono" placeholder="+56 9 XXXX XXXX">
+        </div>
+        <div class="form-group">
+          <label>Fecha levantamiento</label>
+          <input type="date" id="f_fecha">
+        </div>
+        <div class="form-group">
+          <label>N° de compañías en la región</label>
+          <input type="number" id="f_companias" placeholder="0" min="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- EQUIPOS -->
+    <div class="card">
+      <div class="card-title"><span>💻</span> Equipos Computacionales</div>
+
+      <div class="section-divider"><span>Cantidad de equipos</span><hr></div>
+      <div class="counter-grid" id="counters-equipos"></div>
+
+      <div class="section-divider"><span>Estado general del parque</span><hr></div>
+      <div class="form-grid-3">
+        <div class="form-group">
+          <label>Antigüedad promedio (años)</label>
+          <input type="number" id="f_antiguedad" placeholder="0" min="0" max="30">
+        </div>
+        <div class="form-group">
+          <label>Sistema Operativo predominante</label>
+          <select id="f_so">
+            <option value="">Seleccionar...</option>
+            <option>Windows 11</option>
+            <option>Windows 10</option>
+            <option>Windows 7 / 8</option>
+            <option>macOS</option>
+            <option>Linux</option>
+            <option>Mixto</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Estado general del parque</label>
+          <select id="f_estado_parque">
+            <option value="">Seleccionar...</option>
+            <option value="bueno">Bueno (≥80% operativo)</option>
+            <option value="regular">Regular (50–79% operativo)</option>
+            <option value="malo">Malo (&lt;50% operativo)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- RED E INTERNET -->
+    <div class="card">
+      <div class="card-title"><span>🌐</span> Conectividad y Red</div>
+      <div class="form-grid-3">
+        <div class="form-group">
+          <label>Tipo de conexión a Internet</label>
+          <select id="f_conexion">
+            <option value="">Seleccionar...</option>
+            <option>Fibra óptica</option>
+            <option>ADSL / Cable</option>
+            <option>4G/LTE (datos móviles)</option>
+            <option>Sin conexión fija</option>
+            <option>Mixto</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Velocidad bajada (Mbps)</label>
+          <input type="number" id="f_velocidad" placeholder="Ej: 100" min="0">
+        </div>
+        <div class="form-group">
+          <label>Proveedor ISP</label>
+          <input type="text" id="f_isp" placeholder="Ej: Movistar, Claro, VTR">
+        </div>
+        <div class="form-group">
+          <label>¿Tienen red LAN interna?</label>
+          <select id="f_lan">
+            <option value="">Seleccionar...</option>
+            <option>Sí, cableada</option>
+            <option>Sí, WiFi</option>
+            <option>Sí, mixta</option>
+            <option>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Tienen switch/router gestionable?</label>
+          <select id="f_switch">
+            <option value="">Seleccionar...</option>
+            <option>Sí</option>
+            <option>No</option>
+            <option>No sabe</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Tienen servidor local?</label>
+          <select id="f_servidor">
+            <option value="">Seleccionar...</option>
+            <option>Sí, físico</option>
+            <option>Sí, NAS</option>
+            <option>En la nube (cloud)</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOFTWARE Y LICENCIAS -->
+    <div class="card">
+      <div class="card-title"><span>📦</span> Software y Licencias</div>
+      <div class="section-divider"><span>Herramientas en uso</span><hr></div>
+      <div class="check-grid" id="checks-software"></div>
+
+      <div class="section-divider"><span>ERP / Sistemas de gestión</span><hr></div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Sistema ERP / Gestión utilizado</label>
+          <input type="text" id="f_erp" placeholder="Ej: SAP B1, Flexline, SGAS, ninguno">
+        </div>
+        <div class="form-group">
+          <label>¿Licencias al día?</label>
+          <select id="f_licencias">
+            <option value="">Seleccionar...</option>
+            <option>Sí, todas</option>
+            <option>Parcialmente</option>
+            <option>No / Desconoce</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEGURIDAD -->
+    <div class="card">
+      <div class="card-title"><span>🔒</span> Seguridad Informática</div>
+      <div class="check-grid" id="checks-seguridad"></div>
+      <div class="form-grid" style="margin-top:14px;">
+        <div class="form-group">
+          <label>¿Realizan backups periódicos?</label>
+          <select id="f_backup">
+            <option value="">Seleccionar...</option>
+            <option>Sí, automatizados</option>
+            <option>Sí, manuales</option>
+            <option>No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Han sufrido incidentes de seguridad?</label>
+          <select id="f_incidentes">
+            <option value="">Seleccionar...</option>
+            <option>No</option>
+            <option>Sí, virus/malware</option>
+            <option>Sí, pérdida de datos</option>
+            <option>Sí, acceso no autorizado</option>
+            <option>Sí, otro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- OBSERVACIONES -->
+    <div class="card">
+      <div class="card-title"><span>📝</span> Observaciones y Necesidades</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Principales necesidades o problemas</label>
+          <textarea id="f_necesidades" placeholder="Ej: Equipos obsoletos, falta de soporte, sin backup..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Observaciones adicionales</label>
+          <textarea id="f_observaciones" placeholder="Cualquier información relevante..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="guardarConsejo()">✅ Guardar Consejo</button>
+      <button class="btn btn-secondary" onclick="limpiarForm()">🗑️ Limpiar</button>
+    </div>
+
+  </div>
+
+  <div id="selectPrompt" style="text-align:center; padding: 40px; color: var(--gris-500);">
+    <div style="font-size:3rem; margin-bottom:12px;">👆</div>
+    <p style="font-size:0.9rem;">Selecciona un Consejo Regional para comenzar el ingreso de datos</p>
+  </div>
+
+</div>
+
+<!-- ===== PANEL: MAPA ===== -->
+<div class="panel" id="panel-mapa">
+  <div class="stats-row" id="statsRow"></div>
+  <div class="card">
+    <div class="card-title"><span>🗺️</span> Mapa Tecnológico — 16 Consejos Regionales</div>
+    <div class="nota">Haz clic en cualquier consejo para ver su detalle completo.</div>
+    <div class="mapa-grid" id="mapaGrid"></div>
+  </div>
+</div>
+
+<!-- ===== PANEL: INFORME ===== -->
+<div class="panel" id="panel-informe">
+  <div class="card">
+    <div class="card-title"><span>📊</span> Informe Consolidado — Levantamiento Tecnológico</div>
+    <div id="informeContent">
+      <div style="text-align:center; padding:40px; color:var(--gris-500);">
+        <div style="font-size:2.5rem; margin-bottom:10px;">📋</div>
+        <p>Aún no hay datos ingresados. Completa al menos un consejo para ver el informe.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PANEL: EXPORTAR ===== -->
+<div class="panel" id="panel-exportar">
+  <div class="card">
+    <div class="card-title"><span>💾</span> Exportar Datos</div>
+    <p style="font-size:0.85rem; color:var(--gris-500); margin-bottom:20px;">Opciones para guardar y compartir el levantamiento.</p>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:14px;">
+      <div style="border:2px solid var(--gris-300); border-radius:10px; padding:18px;">
+        <div style="font-size:2rem; margin-bottom:8px;">📂</div>
+        <div style="font-weight:700; font-size:0.9rem; margin-bottom:4px;">Guardar sesión (JSON)</div>
+        <p style="font-size:0.78rem; color:var(--gris-500); margin-bottom:12px;">Exporta todos los datos ingresados para continuar después o compartir con otro TI.</p>
+        <button class="btn btn-secondary" onclick="exportarJSON()">💾 Descargar JSON</button>
+      </div>
+
+      <div style="border:2px solid var(--gris-300); border-radius:10px; padding:18px;">
+        <div style="font-size:2rem; margin-bottom:8px;">📥</div>
+        <div style="font-weight:700; font-size:0.9rem; margin-bottom:4px;">Cargar sesión</div>
+        <p style="font-size:0.78rem; color:var(--gris-500); margin-bottom:12px;">Importa un archivo JSON exportado previamente para continuar el trabajo.</p>
+        <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importarJSON(event)">
+        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📂 Cargar JSON</button>
+      </div>
+
+      <div style="border:2px solid var(--gris-300); border-radius:10px; padding:18px;">
+        <div style="font-size:2rem; margin-bottom:8px;">🖨️</div>
+        <div style="font-weight:700; font-size:0.9rem; margin-bottom:4px;">Imprimir / PDF</div>
+        <p style="font-size:0.78rem; color:var(--gris-500); margin-bottom:12px;">Genera un PDF del informe usando el diálogo de impresión del navegador.</p>
+        <button class="btn btn-primary" onclick="imprimirInforme()">🖨️ Imprimir Informe</button>
+      </div>
+
+      <div style="border:2px solid var(--gris-300); border-radius:10px; padding:18px;">
+        <div style="font-size:2rem; margin-bottom:8px;">📋</div>
+        <div style="font-weight:700; font-size:0.9rem; margin-bottom:4px;">Exportar CSV</div>
+        <p style="font-size:0.78rem; color:var(--gris-500); margin-bottom:12px;">Descarga una tabla resumen en CSV para análisis en Excel o Power BI.</p>
+        <button class="btn btn-secondary" onclick="exportarCSV()">📊 Descargar CSV</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ==================== DATOS ====================
+const REGIONES = [
+  { id: 1, num: "I",    nombre: "Tarapacá",          ciudad: "Iquique" },
+  { id: 2, num: "II",   nombre: "Antofagasta",        ciudad: "Antofagasta" },
+  { id: 3, num: "III",  nombre: "Atacama",            ciudad: "Copiapó" },
+  { id: 4, num: "IV",   nombre: "Coquimbo",           ciudad: "La Serena" },
+  { id: 5, num: "V",    nombre: "Valparaíso",         ciudad: "Valparaíso" },
+  { id: 6, num: "VI",   nombre: "O'Higgins",          ciudad: "Rancagua" },
+  { id: 7, num: "VII",  nombre: "Maule",              ciudad: "Talca" },
+  { id: 8, num: "VIII", nombre: "Biobío",             ciudad: "Concepción" },
+  { id: 9, num: "IX",   nombre: "La Araucanía",       ciudad: "Temuco" },
+  { id: 10, num: "X",   nombre: "Los Lagos",          ciudad: "Puerto Montt" },
+  { id: 11, num: "XI",  nombre: "Aysén",              ciudad: "Coyhaique" },
+  { id: 12, num: "XII", nombre: "Magallanes",         ciudad: "Punta Arenas" },
+  { id: 13, num: "RM",  nombre: "Metropolitana",      ciudad: "Santiago" },
+  { id: 14, num: "XIV", nombre: "Los Ríos",           ciudad: "Valdivia" },
+  { id: 15, num: "XV",  nombre: "Arica y Parinacota", ciudad: "Arica" },
+  { id: 16, num: "XVI", nombre: "Ñuble",              ciudad: "Chillán" },
+];
+
+const COUNTERS_EQUIPOS = [
+  { id: "pc_desktop", label: "PCs / Desktop" },
+  { id: "notebooks", label: "Notebooks" },
+  { id: "tablets", label: "Tablets" },
+  { id: "impresoras", label: "Impresoras" },
+  { id: "proyectores", label: "Proyectores" },
+  { id: "celulares", label: "Celulares corporativos" },
+  { id: "ups", label: "UPS / Respaldo eléctrico" },
+  { id: "otros_eq", label: "Otros equipos" },
+];
+
+const CHECKS_SOFTWARE = [
+  "Microsoft 365 (Office)",
+  "Google Workspace",
+  "Teams / Zoom / Meet",
+  "Antivirus corporativo",
+  "VPN",
+  "Sistema de tickets / soporte",
+  "Power BI / Reporting",
+  "Software de RRHH",
+  "Software contable",
+  "Email institucional",
+  "Almacenamiento cloud (Drive/OneDrive)",
+  "Sistema de acceso biométrico",
+];
+
+const CHECKS_SEGURIDAD = [
+  "Antivirus activo y actualizado",
+  "Firewall configurado",
+  "Política de contraseñas",
+  "Doble factor de autenticación (MFA)",
+  "Backup automático",
+  "Control de acceso a equipos",
+  "Política de uso de dispositivos",
+  "Cifrado de disco",
+];
+
+let datos = {};       // { regionId: { ...campos } }
+let regionActual = null;
+
+// ==================== INIT ====================
+window.onload = () => {
+  renderConsejoSelector();
+  renderCounters();
+  renderChecks();
+  actualizarMapa();
+};
+
+function renderConsejoSelector() {
+  const el = document.getElementById('consejoSelector');
+  el.innerHTML = REGIONES.map(r => `
+    <button class="consejo-btn ${datos[r.id] ? 'completo' : ''}" 
+            onclick="seleccionarConsejo(${r.id})" 
+            id="btn-consejo-${r.id}">
+      <strong>${r.num}</strong><br>${r.nombre}
+      ${datos[r.id] ? '<span class="badge">✓</span>' : ''}
+    </button>
+  `).join('');
+}
+
+function renderCounters() {
+  const el = document.getElementById('counters-equipos');
+  el.innerHTML = COUNTERS_EQUIPOS.map(c => `
+    <div class="counter-item">
+      <span class="counter-label">${c.label}</span>
+      <div class="counter-controls">
+        <button class="counter-btn" onclick="cambiarCounter('${c.id}', -1)">−</button>
+        <span class="counter-val" id="cnt-${c.id}">0</span>
+        <button class="counter-btn" onclick="cambiarCounter('${c.id}', 1)">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderChecks() {
+  document.getElementById('checks-software').innerHTML = CHECKS_SOFTWARE.map((s, i) => `
+    <label class="check-item">
+      <input type="checkbox" id="sw-${i}"> <label for="sw-${i}">${s}</label>
+    </label>
+  `).join('');
+
+  document.getElementById('checks-seguridad').innerHTML = CHECKS_SEGURIDAD.map((s, i) => `
+    <label class="check-item">
+      <input type="checkbox" id="sec-${i}"> <label for="sec-${i}">${s}</label>
+    </label>
+  `).join('');
+}
+
+function cambiarCounter(id, delta) {
+  const el = document.getElementById('cnt-' + id);
+  let v = parseInt(el.textContent) + delta;
+  if (v < 0) v = 0;
+  el.textContent = v;
+}
+
+// ==================== SELECCIÓN ====================
+function seleccionarConsejo(id) {
+  // Quitar selección anterior
+  document.querySelectorAll('.consejo-btn').forEach(b => {
+    b.classList.remove('selected');
+    if (!datos[parseInt(b.id.replace('btn-consejo-',''))]) b.classList.remove('completo');
+  });
+
+  regionActual = id;
+  const btn = document.getElementById('btn-consejo-' + id);
+  btn.classList.add('selected');
+  btn.classList.remove('completo');
+
+  document.getElementById('formArea').style.display = 'block';
+  document.getElementById('selectPrompt').style.display = 'none';
+
+  cargarForm(id);
+}
+
+function cargarForm(id) {
+  const d = datos[id] || {};
+
+  // Campos simples
+  ['contacto','cargo','email','telefono','fecha','companias',
+   'antiguedad','so','estado_parque','conexion','velocidad','isp',
+   'lan','switch','servidor','erp','licencias','backup','incidentes',
+   'necesidades','observaciones'].forEach(f => {
+    const el = document.getElementById('f_' + f);
+    if (el) el.value = d[f] || '';
+  });
+
+  // Counters
+  COUNTERS_EQUIPOS.forEach(c => {
+    const el = document.getElementById('cnt-' + c.id);
+    if (el) el.textContent = d['cnt_' + c.id] || 0;
+  });
+
+  // Checkboxes software
+  CHECKS_SOFTWARE.forEach((s, i) => {
+    const el = document.getElementById('sw-' + i);
+    if (el) el.checked = d['sw'] ? d['sw'].includes(s) : false;
+  });
+
+  // Checkboxes seguridad
+  CHECKS_SEGURIDAD.forEach((s, i) => {
+    const el = document.getElementById('sec-' + i);
+    if (el) el.checked = d['sec'] ? d['sec'].includes(s) : false;
+  });
+}
+
+// ==================== GUARDAR ====================
+function guardarConsejo() {
+  if (!regionActual) return alert('Selecciona un consejo primero.');
+
+  const d = {};
+  ['contacto','cargo','email','telefono','fecha','companias',
+   'antiguedad','so','estado_parque','conexion','velocidad','isp',
+   'lan','switch','servidor','erp','licencias','backup','incidentes',
+   'necesidades','observaciones'].forEach(f => {
+    const el = document.getElementById('f_' + f);
+    d[f] = el ? el.value : '';
+  });
+
+  COUNTERS_EQUIPOS.forEach(c => {
+    const el = document.getElementById('cnt-' + c.id);
+    d['cnt_' + c.id] = el ? parseInt(el.textContent) : 0;
+  });
+
+  d['sw'] = CHECKS_SOFTWARE.filter((s, i) => document.getElementById('sw-'+i)?.checked);
+  d['sec'] = CHECKS_SEGURIDAD.filter((s, i) => document.getElementById('sec-'+i)?.checked);
+  d['region'] = REGIONES.find(r => r.id === regionActual);
+
+  datos[regionActual] = d;
+
+  // Actualizar botón
+  const btn = document.getElementById('btn-consejo-' + regionActual);
+  btn.classList.remove('selected');
+  btn.classList.add('completo');
+  btn.innerHTML = `<strong>${d.region.num}</strong><br>${d.region.nombre}<span class="badge">✓</span>`;
+
+  actualizarMapa();
+  generarInforme();
+
+  // Feedback
+  btn.style.transform = 'scale(1.05)';
+  setTimeout(() => btn.style.transform = '', 300);
+}
+
+function limpiarForm() {
+  if (!regionActual) return;
+  if (!confirm('¿Limpiar el formulario actual? (No borrará datos ya guardados)')) return;
+  cargarForm(regionActual);
+  COUNTERS_EQUIPOS.forEach(c => { document.getElementById('cnt-'+c.id).textContent = 0; });
+  CHECKS_SOFTWARE.forEach((_, i) => document.getElementById('sw-'+i).checked = false);
+  CHECKS_SEGURIDAD.forEach((_, i) => document.getElementById('sec-'+i).checked = false);
+}
+
+// ==================== MAPA ====================
+function actualizarMapa() {
+  const total = Object.keys(datos).length;
+  const totalEquipos = Object.values(datos).reduce((s, d) => {
+    return s + COUNTERS_EQUIPOS.reduce((ss, c) => ss + (parseInt(d['cnt_'+c.id])||0), 0);
+  }, 0);
+  const completados = total;
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-box"><div class="val">${completados}</div><div class="lbl">Consejos registrados</div></div>
+    <div class="stat-box"><div class="val">${16 - completados}</div><div class="lbl">Pendientes</div></div>
+    <div class="stat-box"><div class="val">${totalEquipos}</div><div class="lbl">Equipos relevados</div></div>
+    <div class="stat-box"><div class="val">${Math.round(completados/16*100)}%</div><div class="lbl">Avance total</div></div>
+  `;
+
+  document.getElementById('mapaGrid').innerHTML = REGIONES.map(r => {
+    const d = datos[r.id];
+    if (!d) return `
+      <div class="mapa-card sin-datos" onclick="irAConsejo(${r.id})">
+        <div class="region-label">Región ${r.num}</div>
+        <div class="region-nombre">${r.nombre}</div>
+        <div style="font-size:0.75rem; color:var(--gris-500);">Sin datos — clic para ingresar</div>
+      </div>`;
+
+    const totalEq = COUNTERS_EQUIPOS.reduce((s, c) => s + (parseInt(d['cnt_'+c.id])||0), 0);
+    const estado = d.estado_parque || '';
+    const estadoColor = estado === 'bueno' ? '#059669' : estado === 'regular' ? '#D97706' : '#DC2626';
+    const estadoLabel = estado === 'bueno' ? '🟢 Bueno' : estado === 'regular' ? '🟡 Regular' : estado === 'malo' ? '🔴 Malo' : '⚪ -';
+
+    return `
+      <div class="mapa-card" onclick="verDetalle(${r.id})">
+        <div class="region-label">Región ${r.num}</div>
+        <div class="region-nombre">${r.nombre}</div>
+        <div class="mapa-mini-stats">
+          <div class="mini-stat">💻 <strong>${totalEq}</strong> equipos</div>
+          <div class="mini-stat">${estadoLabel}</div>
+          ${d.conexion ? `<div class="mini-stat">🌐 ${d.conexion.split(' ')[0]}</div>` : ''}
+          ${d.companias ? `<div class="mini-stat">🚒 ${d.companias} cías</div>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function irAConsejo(id) {
+  showPanel('ingreso');
+  seleccionarConsejo(id);
+}
+
+function verDetalle(id) {
+  const d = datos[id];
+  const r = REGIONES.find(x => x.id === id);
+  if (!d) return;
+
+  const totalEq = COUNTERS_EQUIPOS.reduce((s, c) => s + (parseInt(d['cnt_'+c.id])||0), 0);
+  const sw = (d.sw || []).join(', ') || 'Ninguno registrado';
+  const seg = (d.sec || []).join(', ') || 'Ninguno registrado';
+
+  const detalle = `
+=== CONSEJO REGIONAL ${r.num} — ${r.nombre} ===
+
+📋 GENERAL
+• Contacto: ${d.contacto || '-'} (${d.cargo || '-'})
+• Correo: ${d.email || '-'}
+• Compañías: ${d.companias || '-'}
+• Fecha levantamiento: ${d.fecha || '-'}
+
+💻 EQUIPOS (Total: ${totalEq})
+${COUNTERS_EQUIPOS.map(c => `• ${c.label}: ${d['cnt_'+c.id]||0}`).join('\n')}
+• SO predominante: ${d.so || '-'}
+• Antigüedad promedio: ${d.antiguedad || '-'} años
+• Estado parque: ${d.estado_parque || '-'}
+
+🌐 CONECTIVIDAD
+• Tipo: ${d.conexion || '-'}
+• Velocidad: ${d.velocidad || '-'} Mbps
+• ISP: ${d.isp || '-'}
+• Red LAN: ${d.lan || '-'}
+• Servidor local: ${d.servidor || '-'}
+
+📦 SOFTWARE
+${sw}
+
+🔒 SEGURIDAD
+${seg}
+• Backup: ${d.backup || '-'}
+• Incidentes: ${d.incidentes || '-'}
+
+📝 NECESIDADES
+${d.necesidades || 'Sin observaciones'}
+  `;
+  alert(detalle);
+}
+
+// ==================== INFORME ====================
+function generarInforme() {
+  const completados = Object.keys(datos).length;
+  if (completados === 0) return;
+
+  let html = `
+    <div class="informe-section">
+      <h3>📊 Resumen Ejecutivo</h3>
+      <div class="stats-row">
+        <div class="stat-box"><div class="val">${completados}</div><div class="lbl">Consejos relevados</div></div>
+        <div class="stat-box"><div class="val">${16 - completados}</div><div class="lbl">Pendientes</div></div>
+        <div class="stat-box"><div class="val">${totalEquiposGlobal()}</div><div class="lbl">Equipos totales</div></div>
+        <div class="stat-box"><div class="val">${Math.round(completados/16*100)}%</div><div class="lbl">Avance</div></div>
+      </div>
+    </div>
+
+    <div class="informe-section">
+      <h3>🗺️ Detalle por Consejo Regional</h3>
+      <table class="informe-tabla">
+        <thead>
+          <tr>
+            <th>Región</th>
+            <th>Equipos</th>
+            <th>S.O.</th>
+            <th>Estado</th>
+            <th>Conectividad</th>
+            <th>Servidor</th>
+            <th>Backup</th>
+            <th>Contacto</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${REGIONES.map(r => {
+            const d = datos[r.id];
+            if (!d) return `<tr style="opacity:0.4;"><td>${r.num} ${r.nombre}</td><td colspan="7" style="font-style:italic;color:var(--gris-500);">Sin datos</td></tr>`;
+            const totalEq = COUNTERS_EQUIPOS.reduce((s, c) => s + (parseInt(d['cnt_'+c.id])||0), 0);
+            const estadoHtml = d.estado_parque === 'bueno' ? '<span class="estado-badge bueno">Bueno</span>' :
+                               d.estado_parque === 'regular' ? '<span class="estado-badge regular">Regular</span>' :
+                               d.estado_parque === 'malo' ? '<span class="estado-badge malo">Malo</span>' : '-';
+            return `<tr>
+              <td><strong>${r.num}</strong> ${r.nombre}</td>
+              <td>${totalEq}</td>
+              <td>${d.so || '-'}</td>
+              <td>${estadoHtml}</td>
+              <td>${d.conexion || '-'}</td>
+              <td>${d.servidor || '-'}</td>
+              <td>${d.backup || '-'}</td>
+              <td>${d.contacto || '-'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="informe-section">
+      <h3>💻 Inventario de Equipos por Región</h3>
+      <table class="informe-tabla">
+        <thead>
+          <tr>
+            <th>Región</th>
+            ${COUNTERS_EQUIPOS.map(c => `<th>${c.label}</th>`).join('')}
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${REGIONES.filter(r => datos[r.id]).map(r => {
+            const d = datos[r.id];
+            const totR = COUNTERS_EQUIPOS.reduce((s,c) => s + (parseInt(d['cnt_'+c.id])||0), 0);
+            return `<tr>
+              <td><strong>${r.num}</strong> ${r.nombre}</td>
+              ${COUNTERS_EQUIPOS.map(c => `<td>${d['cnt_'+c.id]||0}</td>`).join('')}
+              <td><strong>${totR}</strong></td>
+            </tr>`;
+          }).join('')}
+          <tr style="background:var(--gris-100); font-weight:700;">
+            <td>TOTAL</td>
+            ${COUNTERS_EQUIPOS.map(c => `<td>${totalPorTipo(c.id)}</td>`).join('')}
+            <td>${totalEquiposGlobal()}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="informe-section">
+      <h3>📝 Necesidades y Observaciones</h3>
+      <table class="informe-tabla">
+        <thead>
+          <tr><th>Región</th><th>Principales necesidades</th><th>Observaciones</th></tr>
+        </thead>
+        <tbody>
+          ${REGIONES.filter(r => datos[r.id] && (datos[r.id].necesidades || datos[r.id].observaciones)).map(r => {
+            const d = datos[r.id];
+            return `<tr>
+              <td><strong>${r.num}</strong> ${r.nombre}</td>
+              <td>${d.necesidades || '-'}</td>
+              <td>${d.observaciones || '-'}</td>
+            </tr>`;
+          }).join('') || '<tr><td colspan="3" style="text-align:center; color:var(--gris-500);">Sin observaciones registradas</td></tr>'}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  document.getElementById('informeContent').innerHTML = html;
+}
+
+function totalEquiposGlobal() {
+  return Object.values(datos).reduce((s, d) => s + COUNTERS_EQUIPOS.reduce((ss, c) => ss + (parseInt(d['cnt_'+c.id])||0), 0), 0);
+}
+
+function totalPorTipo(id) {
+  return Object.values(datos).reduce((s, d) => s + (parseInt(d['cnt_'+id])||0), 0);
+}
+
+// ==================== EXPORT ====================
+function exportarJSON() {
+  const blob = new Blob([JSON.stringify(datos, null, 2)], { type: 'application/json' });
+  descargar(blob, 'levantamiento-tecnologico.json');
+}
+
+function importarJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const importado = JSON.parse(e.target.result);
+      // Normalizar keys a número
+      datos = {};
+      Object.entries(importado).forEach(([k, v]) => datos[parseInt(k)] = v);
+      renderConsejoSelector();
+      actualizarMapa();
+      generarInforme();
+      alert('✅ Datos importados correctamente: ' + Object.keys(datos).length + ' consejos.');
+    } catch { alert('❌ Error al leer el archivo JSON.'); }
+  };
+  reader.readAsText(file);
+}
+
+function exportarCSV() {
+  const headers = ['Region', 'Nombre', 'Ciudad', 'Contacto', 'Cargo', 'Email',
+    ...COUNTERS_EQUIPOS.map(c => c.label),
+    'Total Equipos', 'SO', 'Estado Parque', 'Conexion', 'Velocidad Mbps', 'ISP',
+    'Servidor', 'Backup', 'Incidentes', 'Companias', 'Fecha'];
+
+  const rows = REGIONES.map(r => {
+    const d = datos[r.id];
+    if (!d) return [r.num, r.nombre, r.ciudad, '', '', '', ...COUNTERS_EQUIPOS.map(() => 0), 0, '', '', '', '', '', '', '', '', '', ''];
+    const totalEq = COUNTERS_EQUIPOS.reduce((s,c) => s + (parseInt(d['cnt_'+c.id])||0), 0);
+    return [r.num, r.nombre, r.ciudad, d.contacto||'', d.cargo||'', d.email||'',
+      ...COUNTERS_EQUIPOS.map(c => d['cnt_'+c.id]||0),
+      totalEq, d.so||'', d.estado_parque||'', d.conexion||'', d.velocidad||'',
+      d.isp||'', d.servidor||'', d.backup||'', d.incidentes||'', d.companias||'', d.fecha||''];
+  });
+
+  const csv = [headers, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  descargar(blob, 'levantamiento-tecnologico.csv');
+}
+
+function descargar(blob, nombre) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = nombre;
+  a.click();
+}
+
+function imprimirInforme() {
+  generarInforme();
+  showPanel('informe');
+  setTimeout(() => window.print(), 500);
+}
+
+// ==================== NAVEGACIÓN ====================
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+
+  if (id === 'mapa') { actualizarMapa(); }
+  if (id === 'informe') { generarInforme(); }
+}
+</script>
+</body>
+</html>
