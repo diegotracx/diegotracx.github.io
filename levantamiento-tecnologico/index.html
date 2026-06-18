@@ -731,12 +731,23 @@ async function guardarEnSheetsAPI(regionId, datoRegion, codigo) {
   if (Array.isArray(payload.sec)) payload.sec = JSON.stringify(payload.sec);
   if (payload.region) delete payload.region;
 
-  const res = await fetch(API_URL, {
+  // Google Apps Script requiere enviar como texto plano con no-cors
+  // y luego verificar leyendo los datos (el Apps Script igual guarda)
+  await fetch(API_URL, {
     method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(payload)
   });
-  const json = await res.json();
-  return json;
+
+  // Con no-cors no podemos leer la respuesta, así que esperamos y verificamos
+  await new Promise(r => setTimeout(r, 1500));
+
+  // Verificamos leyendo la hoja (GET sí es cors-friendly)
+  const check = await fetch(API_URL);
+  const json = await check.json();
+  const guardado = json.datos && json.datos[regionId];
+  return { ok: !!guardado, mensaje: guardado ? 'Guardado correctamente.' : 'No se pudo verificar el guardado. Revisa la hoja de cálculo.' };
 }
 
 // ==================== INIT ====================
