@@ -512,7 +512,8 @@
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-primary" onclick="guardarConsejo()">✅ Guardar Consejo</button>
+      <button class="btn btn-primary" onclick="guardarConsejo()">☁️ Guardar en la Nube</button>
+      <button class="btn btn-secondary" onclick="recargarDesdeNube()">🔄 Recargar datos</button>
       <button class="btn btn-secondary" onclick="limpiarForm()">🗑️ Limpiar</button>
     </div>
 
@@ -552,6 +553,7 @@
 <div class="panel" id="panel-exportar">
   <div class="card">
     <div class="card-title"><span>💾</span> Exportar Datos</div>
+    <div class="nota">✓ Los datos se guardan automáticamente en este navegador. Si vuelves a abrir la página en el mismo computador y navegador, tus consejos seguirán ahí. Aun así, te recomendamos exportar el JSON regularmente como respaldo o para compartir el avance con otra persona.</div>
     <p style="font-size:0.85rem; color:var(--gris-500); margin-bottom:20px;">Opciones para guardar y compartir el levantamiento.</p>
 
     <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:14px;">
@@ -582,6 +584,13 @@
         <div style="font-weight:700; font-size:0.9rem; margin-bottom:4px;">Exportar CSV</div>
         <p style="font-size:0.78rem; color:var(--gris-500); margin-bottom:12px;">Descarga una tabla resumen en CSV para análisis en Excel o Power BI.</p>
         <button class="btn btn-secondary" onclick="exportarCSV()">📊 Descargar CSV</button>
+      </div>
+
+      <div style="border:2px solid var(--gris-300); border-radius:10px; padding:18px;">
+        <div style="font-size:2rem; margin-bottom:8px;">🗑️</div>
+        <div style="font-weight:700; font-size:0.9rem; margin-bottom:4px;">Borrar datos guardados</div>
+        <p style="font-size:0.78rem; color:var(--gris-500); margin-bottom:12px;">Elimina todos los datos guardados automáticamente en este navegador. Exporta antes un respaldo si lo necesitas.</p>
+        <button class="btn btn-secondary" style="color:#DC2626; border-color:#DC2626;" onclick="borrarDatosLocales()">🗑️ Borrar todo</button>
       </div>
     </div>
   </div>
@@ -647,15 +656,111 @@ const CHECKS_SEGURIDAD = [
   "Cifrado de disco",
 ];
 
-let datos = {};       // { regionId: { ...campos } }
+let datos = {};
 let regionActual = null;
 
+const API_URL = 'https://script.google.com/macros/s/AKfycbxAVndOWEgb_DCwCz3RqxFn4UM-RnOuiJgiwuK9A4z28CzhDuGy6G79Hco7zdz7CwcCCg/exec';
+const STORAGE_KEY = 'jncb_levantamiento_tecnologico';
+
+// ==================== INDICADOR VISUAL ====================
+function mostrarIndicador(msg, color) {
+  let ind = document.getElementById('autosaveIndicator');
+  if (!ind) {
+    ind = document.createElement('div');
+    ind.id = 'autosaveIndicator';
+    ind.style.cssText = `
+      position: fixed; bottom: 20px; right: 20px;
+      color: white; padding: 10px 18px; border-radius: 8px;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 9999; opacity: 0; transition: opacity 0.25s;
+      pointer-events: none; max-width: 280px; line-height: 1.4;
+    `;
+    document.body.appendChild(ind);
+  }
+  ind.style.background = color || '#059669';
+  ind.textContent = msg;
+  ind.style.opacity = '1';
+  clearTimeout(ind._timeout);
+  ind._timeout = setTimeout(() => { ind.style.opacity = '0'; }, 3000);
+}
+
+// ==================== CACHÉ LOCAL ====================
+function guardarCacheLocal() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(datos)); } catch(e) {}
+}
+function cargarCacheLocal() {
+  try {
+    const g = localStorage.getItem(STORAGE_KEY);
+    if (g) { const p = JSON.parse(g); datos = {}; Object.entries(p).forEach(([k,v]) => datos[parseInt(k)] = v); return true; }
+  } catch(e) {}
+  return false;
+}
+
+// ==================== API GOOGLE SHEETS ====================
+async function cargarDesdeSheetsAPI() {
+  mostrarIndicador('⏳ Cargando datos desde la nube...', '#2563EB');
+  try {
+    const res = await fetch(API_URL, { method: 'GET' });
+    const json = await res.json();
+    if (json.ok && json.datos) {
+      datos = {};
+      Object.entries(json.datos).forEach(([k, v]) => {
+        const id = parseInt(k);
+        if (id) datos[id] = v;
+      });
+      guardarCacheLocal();
+      mostrarIndicador('✓ Datos cargados desde la nube', '#059669');
+      return true;
+    }
+  } catch(e) {
+    mostrarIndicador('⚠️ Sin conexión — usando datos locales', '#D97706');
+  }
+  return false;
+}
+
+async function guardarEnSheetsAPI(regionId, datoRegion, codigo) {
+  const payload = {
+    region_id: regionId,
+    region_nombre: datoRegion.region ? datoRegion.region.nombre : '',
+    codigo: codigo,
+    ...datoRegion
+  };
+  // Serializar arrays
+  if (Array.isArray(payload.sw)) payload.sw = JSON.stringify(payload.sw);
+  if (Array.isArray(payload.sec)) payload.sec = JSON.stringify(payload.sec);
+  if (payload.region) delete payload.region;
+
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+  const json = await res.json();
+  return json;
+}
+
 // ==================== INIT ====================
-window.onload = () => {
+window.onload = async () => {
   renderConsejoSelector();
   renderCounters();
   renderChecks();
-  actualizarMapa();
+
+  // Mostrar cache local primero (respuesta inmediata)
+  cargarCacheLocal();
+  if (Object.keys(datos).length > 0) {
+    actualizarMapa();
+    generarInforme();
+  }
+
+  // Luego cargar desde la nube y actualizar
+  const ok = await cargarDesdeSheetsAPI();
+  if (ok) {
+    renderConsejoSelector();
+    actualizarMapa();
+    if (Object.keys(datos).length > 0) generarInforme();
+  } else if (Object.keys(datos).length === 0) {
+    actualizarMapa();
+  }
 };
 
 function renderConsejoSelector() {
@@ -756,8 +861,12 @@ function cargarForm(id) {
 }
 
 // ==================== GUARDAR ====================
-function guardarConsejo() {
+async function guardarConsejo() {
   if (!regionActual) return alert('Selecciona un consejo primero.');
+
+  const r = REGIONES.find(x => x.id === regionActual);
+  const codigo = prompt(`🔐 Ingresa el código de acceso para la Región ${r.num} — ${r.nombre}:\n\n(Si no lo tienes, contáctate con el Área TI Sede Central)`);
+  if (!codigo) return;
 
   const d = {};
   ['contacto','cargo','email','telefono','fecha','companias',
@@ -775,22 +884,40 @@ function guardarConsejo() {
 
   d['sw'] = CHECKS_SOFTWARE.filter((s, i) => document.getElementById('sw-'+i)?.checked);
   d['sec'] = CHECKS_SEGURIDAD.filter((s, i) => document.getElementById('sec-'+i)?.checked);
-  d['region'] = REGIONES.find(r => r.id === regionActual);
+  d['region'] = r;
 
-  datos[regionActual] = d;
-
-  // Actualizar botón
   const btn = document.getElementById('btn-consejo-' + regionActual);
-  btn.classList.remove('selected');
-  btn.classList.add('completo');
-  btn.innerHTML = `<strong>${d.region.num}</strong><br>${d.region.nombre}<span class="badge">✓</span>`;
+  btn.textContent = '⏳ Guardando...';
+  mostrarIndicador('⏳ Guardando en la nube...', '#2563EB');
 
-  actualizarMapa();
-  generarInforme();
+  try {
+    const respuesta = await guardarEnSheetsAPI(regionActual, d, codigo.trim());
+    if (respuesta.ok) {
+      datos[regionActual] = d;
+      guardarCacheLocal();
 
-  // Feedback
-  btn.style.transform = 'scale(1.05)';
-  setTimeout(() => btn.style.transform = '', 300);
+      btn.classList.remove('selected');
+      btn.classList.add('completo');
+      btn.innerHTML = `<strong>${r.num}</strong><br>${r.nombre}<span class="badge">✓</span>`;
+
+      actualizarMapa();
+      generarInforme();
+      mostrarIndicador('✓ Guardado correctamente en la nube', '#059669');
+
+      btn.style.transform = 'scale(1.05)';
+      setTimeout(() => btn.style.transform = '', 300);
+    } else {
+      btn.classList.add('selected');
+      btn.innerHTML = `<strong>${r.num}</strong><br>${r.nombre}`;
+      mostrarIndicador('❌ ' + respuesta.mensaje, '#DC2626');
+      alert('❌ ' + respuesta.mensaje);
+    }
+  } catch(e) {
+    btn.classList.add('selected');
+    btn.innerHTML = `<strong>${r.num}</strong><br>${r.nombre}`;
+    mostrarIndicador('❌ Error de conexión. Verifica tu internet.', '#DC2626');
+    alert('Error de conexión. Verifica tu internet e intenta nuevamente.');
+  }
 }
 
 function limpiarForm() {
@@ -1028,6 +1155,7 @@ function importarJSON(event) {
       renderConsejoSelector();
       actualizarMapa();
       generarInforme();
+      guardarCacheLocal();
       alert('✅ Datos importados correctamente: ' + Object.keys(datos).length + ' consejos.');
     } catch { alert('❌ Error al leer el archivo JSON.'); }
   };
@@ -1066,6 +1194,32 @@ function imprimirInforme() {
   generarInforme();
   showPanel('informe');
   setTimeout(() => window.print(), 500);
+}
+
+async function recargarDesdeNube() {
+  const ok = await cargarDesdeSheetsAPI();
+  if (ok) {
+    renderConsejoSelector();
+    actualizarMapa();
+    if (Object.keys(datos).length > 0) generarInforme();
+  }
+}
+
+function borrarDatosLocales() {
+  if (!confirm('¿Seguro que quieres borrar TODOS los datos guardados en este navegador? Esta acción no se puede deshacer. Si necesitas conservarlos, exporta primero un JSON de respaldo.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  datos = {};
+  regionActual = null;
+  renderConsejoSelector();
+  document.getElementById('formArea').style.display = 'none';
+  document.getElementById('selectPrompt').style.display = 'block';
+  actualizarMapa();
+  document.getElementById('informeContent').innerHTML = `
+    <div style="text-align:center; padding:40px; color:var(--gris-500);">
+      <div style="font-size:2.5rem; margin-bottom:10px;">📋</div>
+      <p>Aún no hay datos ingresados. Completa al menos un consejo para ver el informe.</p>
+    </div>`;
+  alert('Datos borrados correctamente.');
 }
 
 // ==================== NAVEGACIÓN ====================
