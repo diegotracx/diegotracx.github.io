@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Consejo Regional — JNCBCH</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  :root {
+    --rojo:#C8102E; --rojo-oscuro:#9B0C22; --rojo-suave:#F9E8EB;
+    --gris-900:#111827; --gris-700:#374151; --gris-500:#6B7280;
+    --gris-300:#D1D5DB; --gris-100:#F3F4F6; --blanco:#FFFFFF;
+    --verde:#059669; --amarillo:#D97706; --azul:#2563EB;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;background:var(--gris-100);color:var(--gris-900);min-height:100vh;}
+
+  /* HEADER */
+  header{background:var(--rojo);color:white;padding:0;}
+  .header-top{display:flex;align-items:center;gap:14px;padding:16px 32px;border-bottom:1px solid rgba(255,255,255,0.15);}
+  .header-icon{width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+  .header-top h1{font-size:1.05rem;font-weight:700;}
+  .header-top p{font-size:0.75rem;opacity:0.8;margin-top:1px;}
+  .header-region{padding:10px 32px;background:rgba(0,0,0,0.15);font-size:0.8rem;font-weight:600;display:none;}
+
+  /* LOGIN */
+  .login-wrap{min-height:calc(100vh - 72px);display:flex;align-items:center;justify-content:center;padding:32px;}
+  .login-box{background:white;border-radius:16px;padding:40px;width:100%;max-width:420px;border:1px solid var(--gris-300);text-align:center;}
+  .login-box .icon{font-size:3rem;margin-bottom:16px;}
+  .login-box h2{font-size:1.2rem;font-weight:700;margin-bottom:6px;}
+  .login-box p{font-size:0.83rem;color:var(--gris-500);margin-bottom:24px;line-height:1.5;}
+  .login-input{width:100%;border:2px solid var(--gris-300);border-radius:9px;padding:12px 16px;font-size:1rem;font-family:'JetBrains Mono',monospace;text-align:center;letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;transition:border-color 0.15s;}
+  .login-input:focus{outline:none;border-color:var(--rojo);}
+  .login-btn{width:100%;padding:12px;background:var(--rojo);color:white;border:none;border-radius:9px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;}
+  .login-btn:hover{background:var(--rojo-oscuro);}
+  .login-error{background:#FEE2E2;color:#991B1B;border-radius:8px;padding:10px;font-size:0.8rem;margin-top:10px;display:none;}
+
+  /* MAIN */
+  main{padding:28px 32px;max-width:1200px;margin:0 auto;display:none;}
+
+  /* TABS */
+  .tabs-bar{display:flex;gap:4px;margin-bottom:20px;background:white;border-radius:10px;padding:5px;border:1px solid var(--gris-300);}
+  .tab-btn{flex:1;padding:9px;border:none;border-radius:7px;background:transparent;cursor:pointer;font-size:0.82rem;font-weight:600;color:var(--gris-500);font-family:'Inter',sans-serif;transition:all 0.15s;}
+  .tab-btn.active{background:var(--rojo);color:white;}
+
+  /* PANEL */
+  .panel{display:none;} .panel.active{display:block;}
+
+  /* CARD */
+  .card{background:white;border-radius:12px;padding:24px;border:1px solid var(--gris-300);margin-bottom:18px;}
+  .card-title{font-size:0.88rem;font-weight:700;color:var(--gris-700);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+
+  /* FORM */
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .form-group{display:flex;flex-direction:column;gap:5px;}
+  .form-group label{font-size:0.76rem;font-weight:600;color:var(--gris-700);}
+  .form-group input,.form-group select,.form-group textarea{border:1.5px solid var(--gris-300);border-radius:7px;padding:8px 11px;font-size:0.82rem;font-family:'Inter',sans-serif;color:var(--gris-900);transition:border-color 0.15s;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--rojo);}
+  .form-group textarea{resize:vertical;min-height:60px;}
+
+  .section-divider{display:flex;align-items:center;gap:10px;margin:18px 0 12px;}
+  .section-divider span{font-size:0.72rem;font-weight:700;color:var(--rojo);text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;}
+  .section-divider hr{flex:1;border:none;border-top:1.5px solid var(--gris-300);}
+
+  /* COUNTERS */
+  .counter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+  .counter-item{background:var(--gris-100);border-radius:8px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .counter-label{font-size:0.76rem;color:var(--gris-700);font-weight:500;flex:1;}
+  .counter-controls{display:flex;align-items:center;gap:5px;}
+  .counter-btn{width:24px;height:24px;border-radius:5px;border:1.5px solid var(--gris-300);background:white;cursor:pointer;font-size:0.95rem;font-weight:700;color:var(--gris-700);display:flex;align-items:center;justify-content:center;transition:all 0.12s;}
+  .counter-btn:hover{border-color:var(--rojo);color:var(--rojo);}
+  .counter-val{font-family:'JetBrains Mono',monospace;font-size:0.88rem;font-weight:700;min-width:22px;text-align:center;}
+
+  /* CHECKS */
+  .check-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;}
+  .check-item{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:7px;background:var(--gris-100);cursor:pointer;}
+  .check-item input[type="checkbox"]{accent-color:var(--rojo);width:14px;height:14px;cursor:pointer;}
+  .check-item label{font-size:0.78rem;color:var(--gris-700);cursor:pointer;}
+
+  /* BOTONES */
+  .btn{padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-size:0.82rem;font-weight:600;font-family:'Inter',sans-serif;transition:all 0.15s;}
+  .btn-primary{background:var(--rojo);color:white;}
+  .btn-primary:hover{background:var(--rojo-oscuro);}
+  .btn-secondary{background:var(--gris-100);color:var(--gris-700);border:1.5px solid var(--gris-300);}
+  .btn-row{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+
+  /* MAPA */
+  .mapa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .mapa-card{background:white;border:2px solid var(--gris-300);border-radius:10px;padding:12px;}
+  .mapa-card.mi-region{border-color:var(--rojo);background:var(--rojo-suave);}
+  .mapa-card.completo{border-color:var(--verde);background:#ECFDF5;}
+  .mapa-card.sin-datos{opacity:0.5;}
+  .region-label{font-size:0.68rem;color:var(--gris-500);font-weight:700;text-transform:uppercase;}
+  .region-nombre{font-size:0.84rem;font-weight:700;color:var(--gris-900);margin:2px 0 7px;}
+  .mapa-mini-stats{display:flex;gap:5px;flex-wrap:wrap;}
+  .mini-stat{background:var(--gris-100);border-radius:4px;padding:2px 6px;font-size:0.68rem;color:var(--gris-700);}
+
+  /* STATS */
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
+  .stat-box{background:white;border-radius:10px;padding:14px 16px;border:1px solid var(--gris-300);}
+  .stat-box .val{font-size:1.7rem;font-weight:700;color:var(--rojo);font-family:'JetBrains Mono',monospace;}
+  .stat-box .lbl{font-size:0.73rem;color:var(--gris-500);margin-top:2px;}
+
+  .nota{background:#FFF7ED;border-left:4px solid var(--amarillo);border-radius:0 8px 8px 0;padding:9px 12px;font-size:0.78rem;color:#92400E;margin-bottom:14px;}
+  .badge-region{display:inline-flex;align-items:center;gap:5px;background:var(--rojo);color:white;padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:700;}
+
+  @media(max-width:768px){
+    main{padding:16px;}
+    .header-top{padding:12px 16px;}
+    .form-grid,.form-grid-3{grid-template-columns:1fr;}
+    .mapa-grid{grid-template-columns:repeat(2,1fr);}
+    .stats-row{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="header-icon">🔥</div>
+    <div>
+      <h1>Portal Consejos Regionales — Levantamiento Tecnológico</h1>
+      <p>Junta Nacional de Cuerpos de Bomberos de Chile · Área TI</p>
+    </div>
+  </div>
+  <div class="header-region" id="headerRegion"></div>
+</header>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="icon">🔐</div>
+    <h2>Acceso Consejo Regional</h2>
+    <p>Ingresa el código de acceso que te proporcionó el Área TI de Sede Central para continuar.</p>
+    <input class="login-input" type="password" id="codigoInput" placeholder="CÓDIGO DE ACCESO" maxlength="30"
+           onkeydown="if(event.key==='Enter') iniciarSesion()">
+    <button class="login-btn" onclick="iniciarSesion()">🔓 Ingresar</button>
+    <div class="login-error" id="loginError">Código incorrecto. Verifica con el Área TI de Sede Central.</div>
+    <p style="font-size:0.72rem;color:var(--gris-500);margin-top:16px;">¿No tienes tu código? Contáctate con el Área TI: <strong>ti@bomberos.cl</strong></p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<main id="mainApp">
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="showTab('miConsejo', this)">📋 Mi Consejo</button>
+    <button class="tab-btn" onclick="showTab('mapaGlobal', this)">🗺️ Mapa Nacional</button>
+  </div>
+
+  <!-- TAB: MI CONSEJO -->
+  <div class="panel active" id="tab-miConsejo">
+
+    <div class="card">
+      <div class="card-title"><span>🏢</span> Información General</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Responsable TI / Contacto</label><input type="text" id="f_contacto" placeholder="Nombre y apellido"></div>
+        <div class="form-group"><label>Cargo</label><input type="text" id="f_cargo" placeholder="Ej: Encargado TI"></div>
+        <div class="form-group"><label>Correo electrónico</label><input type="email" id="f_email" placeholder="correo@ejemplo.cl"></div>
+        <div class="form-group"><label>Teléfono</label><input type="text" id="f_telefono" placeholder="+56 9 XXXX XXXX"></div>
+        <div class="form-group"><label>Fecha levantamiento</label><input type="date" id="f_fecha"></div>
+        <div class="form-group"><label>N° de compañías en la región</label><input type="number" id="f_companias" placeholder="0" min="0"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>💻</span> Equipos Computacionales</div>
+      <div class="section-divider"><span>Cantidad de equipos</span><hr></div>
+      <div class="counter-grid" id="countersEquipos"></div>
+      <div class="section-divider"><span>Estado general</span><hr></div>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Antigüedad promedio (años)</label><input type="number" id="f_antiguedad" placeholder="0" min="0"></div>
+        <div class="form-group"><label>Sistema Operativo predominante</label>
+          <select id="f_so"><option value="">Seleccionar...</option><option>Windows 11</option><option>Windows 10</option><option>Windows 7 / 8</option><option>macOS</option><option>Linux</option><option>Mixto</option></select>
+        </div>
+        <div class="form-group"><label>Estado general del parque</label>
+          <select id="f_estado_parque"><option value="">Seleccionar...</option><option value="bueno">Bueno (≥80% operativo)</option><option value="regular">Regular (50–79%)</option><option value="malo">Malo (&lt;50%)</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🌐</span> Conectividad y Red</div>
+      <div class="form-grid-3">
+        <div class="form-group"><label>Tipo de conexión</label>
+          <select id="f_conexion"><option value="">Seleccionar...</option><option>Fibra óptica</option><option>ADSL / Cable</option><option>4G/LTE</option><option>Sin conexión fija</option><option>Mixto</option></select>
+        </div>
+        <div class="form-group"><label>Velocidad bajada (Mbps)</label><input type="number" id="f_velocidad" placeholder="Ej: 100" min="0"></div>
+        <div class="form-group"><label>Proveedor ISP</label><input type="text" id="f_isp" placeholder="Ej: Movistar, Claro"></div>
+        <div class="form-group"><label>¿Red LAN interna?</label>
+          <select id="f_lan"><option value="">Seleccionar...</option><option>Sí, cableada</option><option>Sí, WiFi</option><option>Sí, mixta</option><option>No</option></select>
+        </div>
+        <div class="form-group"><label>¿Switch/router gestionable?</label>
+          <select id="f_switch"><option value="">Seleccionar...</option><option>Sí</option><option>No</option><option>No sabe</option></select>
+        </div>
+        <div class="form-group"><label>¿Servidor local?</label>
+          <select id="f_servidor"><option value="">Seleccionar...</option><option>Sí, físico</option><option>Sí, NAS</option><option>En la nube</option><option>No</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📦</span> Software y Licencias</div>
+      <div class="check-grid" id="checksSoftware"></div>
+      <div class="form-grid" style="margin-top:14px;">
+        <div class="form-group"><label>Sistema ERP / Gestión</label><input type="text" id="f_erp" placeholder="Ej: SAP B1, Flexline, ninguno"></div>
+        <div class="form-group"><label>¿Licencias al día?</label>
+          <select id="f_licencias"><option value="">Seleccionar...</option><option>Sí, todas</option><option>Parcialmente</option><option>No / Desconoce</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🔒</span> Seguridad Informática</div>
+      <div class="check-grid" id="checksSeguridad"></div>
+      <div class="form-grid" style="margin-top:14px;">
+        <div class="form-group"><label>¿Realizan backups periódicos?</label>
+          <select id="f_backup"><option value="">Seleccionar...</option><option>Sí, automatizados</option><option>Sí, manuales</option><option>No</option></select>
+        </div>
+        <div class="form-group"><label>¿Han sufrido incidentes de seguridad?</label>
+          <select id="f_incidentes"><option value="">Seleccionar...</option><option>No</option><option>Sí, virus/malware</option><option>Sí, pérdida de datos</option><option>Sí, acceso no autorizado</option><option>Sí, otro</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📝</span> Observaciones y Necesidades</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Principales necesidades o problemas</label><textarea id="f_necesidades" placeholder="Ej: Equipos obsoletos, falta de soporte..."></textarea></div>
+        <div class="form-group"><label>Observaciones adicionales</label><textarea id="f_observaciones" placeholder="Cualquier información relevante..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="guardarMiConsejo()">☁️ Guardar mis datos</button>
+      <button class="btn btn-secondary" onclick="recargar()">🔄 Recargar</button>
+    </div>
+
+  </div>
+
+  <!-- TAB: MAPA GLOBAL -->
+  <div class="panel" id="tab-mapaGlobal">
+    <div class="nota">Vista de solo lectura — puedes ver el avance de todos los consejos regionales, pero solo puedes editar los datos de tu propia región.</div>
+    <div class="stats-row" id="statsRow"></div>
+    <div class="card">
+      <div class="card-title"><span>🗺️</span> Estado Nacional — 16 Consejos Regionales</div>
+      <div class="mapa-grid" id="mapaGrid"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbxAVndOWEgb_DCwCz3RqxFn4UM-RnOuiJgiwuK9A4z28CzhDuGy6G79Hco7zdz7CwcCCg/exec';
+
+const CODIGOS = {
+  "TARAPACA2026":1, "ANTOFAGASTA2026":2, "ATACAMA2026":3, "COQUIMBO2026":4,
+  "VALPARAISO2026":5, "OHIGGINS2026":6, "MAULE2026":7, "BIOBIO2026":8,
+  "ARAUCANIA2026":9, "LOSLAGOS2026":10, "AYSEN2026":11, "MAGALLANES2026":12,
+  "METROPOLITANA2026":13, "LOSRIOS2026":14, "ARICA2026":15, "NUBLE2026":16
+};
+
+const REGIONES = [
+  {id:1,num:"I",nombre:"Tarapacá"},{id:2,num:"II",nombre:"Antofagasta"},
+  {id:3,num:"III",nombre:"Atacama"},{id:4,num:"IV",nombre:"Coquimbo"},
+  {id:5,num:"V",nombre:"Valparaíso"},{id:6,num:"VI",nombre:"O'Higgins"},
+  {id:7,num:"VII",nombre:"Maule"},{id:8,num:"VIII",nombre:"Biobío"},
+  {id:9,num:"IX",nombre:"La Araucanía"},{id:10,num:"X",nombre:"Los Lagos"},
+  {id:11,num:"XI",nombre:"Aysén"},{id:12,num:"XII",nombre:"Magallanes"},
+  {id:13,num:"RM",nombre:"Metropolitana"},{id:14,num:"XIV",nombre:"Los Ríos"},
+  {id:15,num:"XV",nombre:"Arica y Parinacota"},{id:16,num:"XVI",nombre:"Ñuble"}
+];
+
+const COUNTERS = [
+  {id:"pc_desktop",label:"PCs / Desktop"},{id:"notebooks",label:"Notebooks"},
+  {id:"tablets",label:"Tablets"},{id:"impresoras",label:"Impresoras"},
+  {id:"proyectores",label:"Proyectores"},{id:"celulares",label:"Celulares corporativos"},
+  {id:"ups",label:"UPS / Respaldo"},{id:"otros_eq",label:"Otros equipos"}
+];
+
+const SOFTWARE = ["Microsoft 365 (Office)","Google Workspace","Teams / Zoom / Meet",
+  "Antivirus corporativo","VPN","Sistema de tickets / soporte","Power BI / Reporting",
+  "Software de RRHH","Software contable","Email institucional",
+  "Almacenamiento cloud (Drive/OneDrive)","Sistema de acceso biométrico"];
+
+const SEGURIDAD = ["Antivirus activo y actualizado","Firewall configurado",
+  "Política de contraseñas","Doble factor de autenticación (MFA)","Backup automático",
+  "Control de acceso a equipos","Política de uso de dispositivos","Cifrado de disco"];
+
+let miRegionId = null;
+let miCodigo = null;
+let datosGlobales = {};
+
+// ==================== LOGIN ====================
+function iniciarSesion() {
+  const codigo = document.getElementById('codigoInput').value.trim().toUpperCase();
+  const regionId = CODIGOS[codigo];
+  if (!regionId) {
+    document.getElementById('loginError').style.display = 'block';
+    return;
+  }
+  miRegionId = regionId;
+  miCodigo = codigo;
+  const region = REGIONES.find(r => r.id === regionId);
+
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  const hr = document.getElementById('headerRegion');
+  hr.style.display = 'block';
+  hr.innerHTML = `🔥 Sesión activa: <strong>Región ${region.num} — ${region.nombre}</strong>`;
+
+  renderCounters();
+  renderChecks();
+  cargarDatos();
+}
+
+// ==================== RENDER ====================
+function renderCounters() {
+  document.getElementById('countersEquipos').innerHTML = COUNTERS.map(c => `
+    <div class="counter-item">
+      <span class="counter-label">${c.label}</span>
+      <div class="counter-controls">
+        <button class="counter-btn" onclick="cambiarCounter('${c.id}',-1)">−</button>
+        <span class="counter-val" id="cnt-${c.id}">0</span>
+        <button class="counter-btn" onclick="cambiarCounter('${c.id}',1)">+</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderChecks() {
+  document.getElementById('checksSoftware').innerHTML = SOFTWARE.map((s,i) =>
+    `<label class="check-item"><input type="checkbox" id="sw-${i}"><label for="sw-${i}">${s}</label></label>`).join('');
+  document.getElementById('checksSeguridad').innerHTML = SEGURIDAD.map((s,i) =>
+    `<label class="check-item"><input type="checkbox" id="sec-${i}"><label for="sec-${i}">${s}</label></label>`).join('');
+}
+
+function cambiarCounter(id, delta) {
+  const el = document.getElementById('cnt-'+id);
+  let v = parseInt(el.textContent) + delta;
+  if (v < 0) v = 0;
+  el.textContent = v;
+}
+
+// ==================== CARGAR DATOS ====================
+async function cargarDatos() {
+  mostrarIndicador('⏳ Cargando datos...', '#2563EB');
+  try {
+    const res = await fetch(API_URL);
+    const json = await res.json();
+    if (json.ok) {
+      datosGlobales = {};
+      Object.entries(json.datos).forEach(([k,v]) => datosGlobales[parseInt(k)] = v);
+      cargarFormulario();
+      renderMapa();
+      mostrarIndicador('✓ Datos cargados', '#059669');
+    }
+  } catch(e) {
+    mostrarIndicador('⚠️ Error de conexión', '#D97706');
+  }
+}
+
+function cargarFormulario() {
+  const d = datosGlobales[miRegionId] || {};
+  ['contacto','cargo','email','telefono','fecha','companias','antiguedad','so',
+   'estado_parque','conexion','velocidad','isp','lan','switch','servidor',
+   'erp','licencias','backup','incidentes','necesidades','observaciones'].forEach(f => {
+    const el = document.getElementById('f_'+f);
+    if (el) el.value = d[f] || '';
+  });
+  COUNTERS.forEach(c => {
+    const el = document.getElementById('cnt-'+c.id);
+    if (el) el.textContent = d['cnt_'+c.id] || 0;
+  });
+  SOFTWARE.forEach((s,i) => {
+    const el = document.getElementById('sw-'+i);
+    if (el) el.checked = Array.isArray(d.sw) ? d.sw.includes(s) : false;
+  });
+  SEGURIDAD.forEach((s,i) => {
+    const el = document.getElementById('sec-'+i);
+    if (el) el.checked = Array.isArray(d.sec) ? d.sec.includes(s) : false;
+  });
+}
+
+// ==================== GUARDAR ====================
+async function guardarMiConsejo() {
+  const d = {};
+  ['contacto','cargo','email','telefono','fecha','companias','antiguedad','so',
+   'estado_parque','conexion','velocidad','isp','lan','switch','servidor',
+   'erp','licencias','backup','incidentes','necesidades','observaciones'].forEach(f => {
+    const el = document.getElementById('f_'+f);
+    d[f] = el ? el.value : '';
+  });
+  COUNTERS.forEach(c => {
+    const el = document.getElementById('cnt-'+c.id);
+    d['cnt_'+c.id] = el ? parseInt(el.textContent) : 0;
+  });
+  d.sw = SOFTWARE.filter((_,i) => document.getElementById('sw-'+i)?.checked);
+  d.sec = SEGURIDAD.filter((_,i) => document.getElementById('sec-'+i)?.checked);
+
+  const r = REGIONES.find(x => x.id === miRegionId);
+  const payload = {
+    region_id: miRegionId,
+    region_nombre: r.nombre,
+    codigo: miCodigo,
+    ...d,
+    sw: JSON.stringify(d.sw),
+    sec: JSON.stringify(d.sec)
+  };
+
+  mostrarIndicador('⏳ Guardando en la nube...', '#2563EB');
+  try {
+    await fetch(API_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: {'Content-Type':'text/plain'},
+      body: JSON.stringify(payload)
+    });
+    await new Promise(r => setTimeout(r, 1500));
+    datosGlobales[miRegionId] = d;
+    renderMapa();
+    mostrarIndicador('✓ Datos guardados correctamente', '#059669');
+  } catch(e) {
+    mostrarIndicador('❌ Error de conexión', '#DC2626');
+  }
+}
+
+async function recargar() {
+  await cargarDatos();
+}
+
+// ==================== MAPA ====================
+function renderMapa() {
+  const completados = Object.keys(datosGlobales).length;
+  const totalEq = Object.values(datosGlobales).reduce((s,d) =>
+    s + COUNTERS.reduce((ss,c) => ss + (parseInt(d['cnt_'+c.id])||0), 0), 0);
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-box"><div class="val">${completados}</div><div class="lbl">Consejos registrados</div></div>
+    <div class="stat-box"><div class="val">${16-completados}</div><div class="lbl">Pendientes</div></div>
+    <div class="stat-box"><div class="val">${totalEq}</div><div class="lbl">Equipos relevados</div></div>
+    <div class="stat-box"><div class="val">${Math.round(completados/16*100)}%</div><div class="lbl">Avance nacional</div></div>`;
+
+  document.getElementById('mapaGrid').innerHTML = REGIONES.map(r => {
+    const d = datosGlobales[r.id];
+    const esMia = r.id === miRegionId;
+    if (!d) return `
+      <div class="mapa-card sin-datos ${esMia?'mi-region':''}">
+        <div class="region-label">Región ${r.num}</div>
+        <div class="region-nombre">${r.nombre}</div>
+        <div style="font-size:0.7rem;color:var(--gris-500);">${esMia?'⭐ Tu región — sin datos aún':'Sin datos'}</div>
+      </div>`;
+    const totR = COUNTERS.reduce((s,c) => s + (parseInt(d['cnt_'+c.id])||0), 0);
+    const estadoLabel = d.estado_parque==='bueno'?'🟢 Bueno':d.estado_parque==='regular'?'🟡 Regular':d.estado_parque==='malo'?'🔴 Malo':'⚪ -';
+    return `
+      <div class="mapa-card completo ${esMia?'mi-region':''}">
+        <div class="region-label">Región ${r.num} ${esMia?'⭐':''}</div>
+        <div class="region-nombre">${r.nombre}</div>
+        <div class="mapa-mini-stats">
+          <div class="mini-stat">💻 <strong>${totR}</strong> equipos</div>
+          <div class="mini-stat">${estadoLabel}</div>
+          ${d.conexion?`<div class="mini-stat">🌐 ${d.conexion.split(' ')[0]}</div>`:''}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ==================== UI HELPERS ====================
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'mapaGlobal') renderMapa();
+}
+
+function mostrarIndicador(msg, color) {
+  let ind = document.getElementById('ind');
+  if (!ind) {
+    ind = document.createElement('div'); ind.id = 'ind';
+    ind.style.cssText = `position:fixed;bottom:20px;right:20px;color:white;padding:10px 16px;
+      border-radius:8px;font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:600;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:9999;opacity:0;transition:opacity 0.25s;pointer-events:none;`;
+    document.body.appendChild(ind);
+  }
+  ind.style.background = color;
+  ind.textContent = msg;
+  ind.style.opacity = '1';
+  clearTimeout(ind._t);
+  ind._t = setTimeout(() => ind.style.opacity = '0', 3000);
+}
+</script>
+</body>
+</html>
